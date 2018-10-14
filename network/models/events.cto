@@ -20,6 +20,26 @@ namespace composer.events
 abstract event BasicEvent {
 }
 
+// notify student that registration change has been registrationAccepted
+event registrationAccepted extends BasicEvent {
+  o String courseNumber
+  o String studentID
+}
+
+// notify cashier that registration change has been registrationAccepted
+event registrationSubmitted extends BasicEvent {
+  o String courseNumber
+  o String studentID
+  o String change
+}
+
+// notify student, cashier that course is cancelled
+event courseCancelled extends BasicEvent {
+  o String courseNumber
+  o String studentID
+  o String reason
+}
+
 // notify seller, financeCo that an order has been placed
 event requested extends BasicEvent {
   o String orderNumber

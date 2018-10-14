@@ -8,8 +8,8 @@ import composer.events.*
 participant Buyer identified by buyerID extends Member{
     o String buyerID
 }
-participant Seller identified by sellerID extends Member{
-    o String sellerID
+participant Registrar identified by registrarID extends Member{
+    o String registrarID
 }
 participant Shipper identified by shipperID extends Member {
     o String shipperID
@@ -51,6 +51,21 @@ asset Order identified by orderNumber {
     --> FinanceCo financeCo 
 
 }
+
+  transaction AcceptRegistrationStatus {
+   --> Course course
+   --> Student student
+}
+  transaction SubmitRegistrationStatus {
+    --> Course course
+    --> Student student
+}
+  transaction CancelCourse {
+    o String reason
+    --> Course course
+    --> Student student
+}
+
   transaction CreateOrder {
     o Integer amount
     --> Order order
