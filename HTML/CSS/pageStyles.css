@@ -11,12 +11,32 @@ body {height: 100%}
 		width: 100%;
 		overflow: auto;
 	}
+	.scrollingHalfPane{
+		height: calc(40vh - 5em);
+		margin-left: 0px;
+		width: 100%;
+		overflow: auto;
+	}
 	.button-wide {
-		width: 30%;
+		width: 15%;
 		color: blue;
 		font-size: 1em;
 		text-align: center;
 	}	
+	.scrollingPaneLeft{
+		position: fixed;
+		height: calc(80vh - 5em);
+		margin-left: 1%;
+		width: 45%;
+		overflow: scroll;
+	}
+	.scrollingPaneRight{
+		position: fixed;
+		height: calc(80vh - 5em);
+		margin-left: 50%;
+		width: 45%;
+		overflow: scroll;
+	}
 }
 @media screen and ( min-height: 800px ) {	
 	.scrollingPane{
@@ -25,12 +45,32 @@ body {height: 100%}
 		width: 100%;
 		overflow: auto;
 	}
+	.scrollingHalfPane{
+		height: calc(40vh - 5em);
+		margin-left: 0px;
+		width: 100%;
+		overflow: auto;
+	}
 	.button-wide {
-		width: 30%;
+		width: 15%;
 		color: blue;
-		font-size: 1.5em;
+		font-size: 1em;
 		text-align: center;
 	}	
+	.scrollingPaneLeft{
+		position: fixed;
+		height: calc(85vh - 5em);
+		margin-left: 1%;
+		width: 45%;
+		overflow: auto;
+	}
+	.scrollingPaneRight{
+		position: fixed;
+		height: calc(85vh - 5em);
+		margin-left: 50%;
+		width: 45%;
+		overflow: auto;
+	}
 }
 @media screen and ( min-width: 800px ) {	
 	.wide{
@@ -46,8 +86,35 @@ body {height: 100%}
 		margin-right: .125em;
 		overflow: auto;
 	}
-}	
-.strike {
+}
+.highlight {
+	border: .125em solid rgb(88, 8, 235);
+	-webkit-border-radius: .5em;
+	  -moz-border-radius: .5em;
+	  border-radius: .5em;
+	  background-color: rgb(252, 245, 151);
+	  font-weight: bold;  
+}
+.notify.on {
+	border-radius: 100%;
+	height: 2em;
+	width: 2em;
+	background-color: rgba(226, 32, 91, 0.77);
+	color: #ffffff;
+	text-align: top;
+	position: relative;
+	top: .4em;
+	float: right;
+	right: .5em;
+	visibility: visible;
+  }
+  .notify.off {
+	visibility: hidden;
+  }
+  .n_count.on { font-size: .5em; font-weight: bold; visibility: visible;}
+  .n_count.off { font-size: .5em; font-weight: bold; visibility: hidden;}
+  h2 {font-size: 1.5em; margin-top: .25em; margin-bottom: .25em;}
+  .strike {
     position: relative;
 }
 .strike::before {
@@ -59,9 +126,9 @@ body {height: 100%}
     top: 50%;
 }
 .buyer { background-color: #CBCFD0; }
-.seller { background-color: #5DC15D;}
-.provider { background-color: #8A99D3;}
-.shipper { background-color: #9CF2C5;}
+.seller { background-color: rgb(173, 242, 173);}
+.provider { background-color: rgb(192, 221, 252);}
+.shipper { background-color: rgb(242, 232, 156);}
 .finance { background-color: #95DAEE;}
 .messagePane{
 	height: 3.5em;
@@ -75,37 +142,73 @@ p.message{
 	margin: .125em;
 	padding: 0px;
 	text-align: left;
+	overflow: auto;
 }
 .spacer{
 	height: 1em;
 	width: 100%;
 	background-color: #DCE8CB
 }
-.scrollingPaneLeft{
+.halfPane{
+	font-size: 1em;
+	position: absolute;
+	height: 40%;
+	margin: .0625em;
+	width: 48%;
+	overflow: hidden;
+}
+.halfPane2{
+	font-size: 1em;
+	position: absolute;
+	height: 40%;
+	margin: .0625em;
+	top: 50%;
+	width: 48%;
+	overflow: hidden;
+}
+
+.scrollingPaneTopLeft{
 	position: fixed;
-	height: 80%;
+	height: 45%;
 	margin-left: 1%;
 	width: 45%;
-	overflow: auto;
+	overflow: scroll;
 }
-.scrollingPaneRight{
+.scrollingPaneBottomRight{
 	position: fixed;
-	height: 80%;
+	height: 45%;
+	margin-top: 50%;
 	margin-left: 50%;
 	width: 45%;
-	overflow: auto;
+	overflow: scroll;
+}
+.scrollingPaneBottomLeft{
+	position: fixed;
+	height: 45%;
+	margin-top: 50%;
+	margin-left: 1%;
+	width: 45%;
+	overflow: scroll;
+}
+.scrollingPaneTopRight{
+	position: fixed;
+	height: 45%;
+	margin-left: 50%;
+	width: 45%;
+	overflow: scroll;
 }
 .blockchain {
 	background-color: black;
 	position: fixed;
-	height: 8%;
+	height: 100px;
 	margin-left: 1%;
 	width: 95%;
-	top: 92%;
+	top: 93%;
 	padding: 4px;
 	overflow-x: auto;
     overflow-y: hidden;
-    white-space: nowrap;}
+	white-space: nowrap;
+}
 .block {
 	background-color: blue;
 	color: white;
@@ -118,13 +221,21 @@ p.message{
 	width: 290px;
 	word-wrap: break-word;
 	white-space: normal;
+	font-size: .75em;
 }
-.bottom-hold{
+.bottom-hold-upper{
 	position: fixed;
 	height: 10%;
 	margin-left: 1%;
 	width: 90%;
-	top: 85%;
+	top: 45%;
+}
+.bottom-hold-lower{
+	position: fixed;
+	height: 10%;
+	margin-left: 1%;
+	width: 90%;
+	top: 90%;
 }
 .container{
 	width: 100%;
@@ -352,8 +463,7 @@ tr.hideRow {display: none;}
 	overflow: scroll;
 }
 .cover h1, .cover .h1 { font-size: 3em;}
-.cover .navbar { background-color: #000000;}
-.h2 {font-size: 2em;}
+.cover .navbar { background-color: #44422e;}
 .col-md-6 {width: 470px;}
 .mic_enabled {
 	opacity: 1;

@@ -18,6 +18,8 @@
         {"type": "Shipper", "pw": "speedmatters", "companyName": "Fast Eddy, Inc", "id": "speedmatters@fasteddyinc.com"},
         {"type": "Shipper", "pw": "wantitnow", "companyName": "The Overnight Experts, Inc", "id": "wantitnow@overnightexpressinc.com"},
         {"type": "Provider", "pw": "info", "companyName": "PC Hardware Now, Inc", "id": "info@pchardwarenowinc.com"},
+        {"type": "Shipper", "pw": "dummyShipper", "companyName": "dummy shipper", "id": "noop@dummy"},
+        {"type": "Provider", "pw": "dummyProvider", "companyName": "dummy provider", "id": "noop@dummy"},
         {"type": "Provider", "pw": "power", "companyName": "UPS Systems, Inc", "id": "power@upssystemsinc.com"},
         {"type": "Provider", "pw": "online", "companyName": "The App Store, Inc", "id": "online@theappstoreinc.com"},
         {"type": "FinanceCo", "pw": "easymoney", "companyName": "The Global Financier", "id": "easymoney@easymoneyinc.com"}
