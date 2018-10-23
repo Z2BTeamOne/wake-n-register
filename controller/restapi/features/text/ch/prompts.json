@@ -4,7 +4,7 @@
     "header":"第5章: 构建管理用户体验",
     "titleBar":"从0到区块链教程",
     "idx_unified":"导入统一的用户体验",
-    "idx_buyer":"导入买家用户体验",
+    "idx_student":"导入买家用户体验",
     "idx_seller":"导入卖家用户体验",
     "idx_provider":"导入提供商用户体验",
     "idx_shipper":"导入发货商用户体验",
@@ -67,7 +67,7 @@
     "bc_gh_api":"获取历史学家",
     "bc_gh_param":"(无)"
     },
-    "buyer": {
+    "student": {
     "title":"买家第6章. 选择买家看它们的视图",
     "newOrder":"创建新订单",
     "orderStatus":"显示订单状态"
@@ -92,7 +92,7 @@
     },
     "createMember": {
     "cd_type":"类型",
-    "cd_buyer":"买家",
+    "cd_student":"买家",
     "cd_seller":"卖家",
     "cd_shipper":"发货商",
     "cd_provider":"提供商",
@@ -191,7 +191,7 @@
     "p_no_order_msg":"这个提供商没有订单",
     "sh_no_order_msg":"这个发货商没有订单",
     "create_msg":"正在处理创建订单请求",
-    "buyer":"买家"
+    "student":"买家"
     },
     "financeCoOrder": {
     "status":"当前状态",

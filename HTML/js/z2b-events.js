@@ -23,15 +23,15 @@ function memberLoad ()
   var options = {};
   options.registry = 'Seller';
   var options2 = {};
-  options2.registry = 'Buyer';
+  options2.registry = 'Student';
   var options3 = {};
   options3.registry = 'Provider';
   var options4 = {};
   options4.registry = 'Shipper';
   $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _students, _providers, _shippers)
     { 
-      buyers = _buyers[0].members;
+      students = _students[0].members;
       sellers = _sellers[0].members;
       s_string = _getMembers(sellers);
       providers = _providers[0].members
@@ -50,15 +50,15 @@ function deferredMemberLoad()
   var options = {};
   options.registry = 'Seller';
   var options2 = {};
-  options2.registry = 'Buyer';
+  options2.registry = 'Students';
   var options3 = {};
   options3.registry = 'Provider';
   var options4 = {};
   options4.registry = 'Shipper';
   $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _students, _providers, _shippers)
     { 
-      buyers = _buyers[0].members;
+      students = _students[0].members;
       sellers = _sellers[0].members;
       s_string = _getMembers(sellers);
       providers = _providers[0].members

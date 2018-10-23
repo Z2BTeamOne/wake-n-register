@@ -4,7 +4,7 @@
     "header":"Capítulo 5: Construindo a Experiência de Usuário Administrativo",
     "titleBar":"Tutorial Zero to Blockchain",
     "idx_unified":"carregar a Experiência de Usuário Unificado",
-    "idx_buyer":"carregar a Experiência de Usuário Consumidor",
+    "idx_student":"carregar a Experiência de Usuário Consumidor",
     "idx_seller":"carregar a Experiência de Usuário Vendedor",
     "idx_provider":"carregar a Experiência de Usuário Fornecedor",
     "idx_shipper":"carregar a Experiência de Usuário Transportador",
@@ -67,7 +67,7 @@
     "bc_gh_api":"obter histórico",
     "bc_gh_param":""
     },
-    "buyer": {
+    "student": {
     "title":"Capítulo do Consumidor 06. Selecione Consumidor para ver sua visão:",
     "newOrder":"Criar novo pedido",
     "orderStatus":"Exibir Estatus de Pedidos"
@@ -92,7 +92,7 @@
     },
     "createMember": {
     "cd_type":"Tipo",
-    "cd_buyer":"Consumidor",
+    "cd_student":"Consumidor",
     "cd_seller":"Vendedor",
     "cd_shipper":"Transportador",
     "cd_provider":"Fornecedor",
@@ -191,7 +191,7 @@
     "p_no_order_msg":"Sem pedidos para esse fornecedor:",
     "sh_no_order_msg":"Sem pedidos para esse transportador:",
     "create_msg":"Processando requerimento de criar pedido",
-    "buyer":"Consumidor:"
+    "student":"Consumidor:"
     },
     "financeCoOrder": {
     "status":"Estatus Atual",

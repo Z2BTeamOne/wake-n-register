@@ -484,7 +484,8 @@ exports.getRegistries = function(req, res, next)
 /**
  * retrieve array of members from specified registry type
  * @param {express.req} req - the inbound request object from the client
- *  req.body.registry: _string - type of registry to search; e.g. 'Buyer', 'Seller', etc.
+ *  req.body.registry: _string - type of registry to search; e.g.
+ *  'Student', 'Seller', etc.
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
  * @returns {Object} an array of members
@@ -512,8 +513,8 @@ exports.getMembers = function(req, res, next) {
                             _jsn.companyName = _arr[_idx].companyName;
                             switch (req.body.registry)
                             {
-                            case 'Buyer':
-                                _jsn.id = _arr[_idx].buyerID;
+                            case 'Student':
+                                _jsn.id = _arr[_idx].studentID;
                                 break;
                             case 'Seller':
                                 _jsn.id = _arr[_idx].sellerID;
@@ -641,7 +642,8 @@ exports.issueIdentity = function(req, res, next) {
 /**
  * gets the assets from the order registry
  * @param {express.req} req - the inbound request object from the client
- *  req.body.type - the type of individual making the request (admin, buyer, seller, etc)
+ *  req.body.type - the type of individual making the request (admin,
+ *  student, seller, etc)
  *  req.body.id - the id of the individual making the request
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
@@ -673,8 +675,8 @@ exports.getAssets = function(req, res, next) {
                                     {
                                     switch(req.body.type)
                                     {
-                                    case 'Buyer':
-                                        if (req.body.id === _arr[_idx].buyer.$identifier)
+                                    case 'Student':
+                                        if (req.body.id === _arr[_idx].student.$identifier)
                                         {
                                             let _jsn = serializer.toJSON(_arr[_idx]);
                                             _jsn.type = req.body.registry;
@@ -727,7 +729,7 @@ exports.getAssets = function(req, res, next) {
  * Adds a new member to the specified registry
  * @param {express.req} req - the inbound request object from the client
  *  req.body.companyName: _string - member company name
- *  req.body.type: _string - member type (registry type); e.g. 'Buyer', 'Seller', etc.
+ *  req.body.type: _string - member type (registry type); e.g. 'Student', 'Seller', etc.
  *  req.body.id: _string - id of member to add (email address)
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
@@ -802,7 +804,8 @@ exports.removeMember = function(req, res, next) {
 /**
  * get Historian Records
  * @param {express.req} req - the inbound request object from the client
- *  req.body.registry: _string - type of registry to search; e.g. 'Buyer', 'Seller', etc.
+ *  req.body.registry: _string - type of registry to search; e.g.
+ *  'Student', 'Seller', etc.
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
  * @returns {Array} an array of members

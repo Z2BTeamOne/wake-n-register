@@ -5,7 +5,7 @@
 This business network defines:
 
 **Participant**
-`Buyer`
+`Students`
 `Seller`
 `Provider`
 `Shipper`
@@ -29,7 +29,7 @@ This business network defines:
 **Event**
 `(none yet)`
 
-Orders are created by Buyers and executed by Sellers, who may work with a 3rd part (Provider) to fulfill the order. Either Sellers or Providers can RequestShipment, which is fulfilled by a Shipper who executes a Deliver transaction when complete. Orders can be Disputed. Disputed Orders can be resolved. Payments are made against either Delivered or Resolved Orders. 
+Orders are created by Students and executed by Sellers, who may work with a 3rd part (Provider) to fulfill the order. Either Sellers or Providers can RequestShipment, which is fulfilled by a Shipper who executes a Deliver transaction when complete. Orders can be Disputed. Disputed Orders can be resolved. Payments are made against either Delivered or Resolved Orders. 
 
 To test this Business Network Definition in the **Test** tab:
 
@@ -56,15 +56,15 @@ asset Order identified by orderNumber {
     o String resolve
     o String backorder
     o String refund
-    --> Buyer buyer
+    --> Student student
     --> Seller seller 
 ```
 
 Create a participant:
 
 ```
-participant Buyer identified by buyerID {
-    o String buyerID
+participant Student identified by studentID {
+    o String studentID
     o String companyName
 }
 participant Seller identified by sellerID {
@@ -92,7 +92,7 @@ asset Order identified by orderNumber {
     o String resolve
     o String backorder
     o String refund
-    --> Buyer buyer
+    --> Student student
     --> Seller seller 
 
 }
@@ -116,12 +116,12 @@ Submit a  transaction:
   transaction CreateOrder {
     o Integer amount
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction Buy {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction OrderFromSupplier {
@@ -144,20 +144,20 @@ Submit a  transaction:
   transaction Dispute {
     o String dispute
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction Resolve {
     o String resolve
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction RequestPayment {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
@@ -169,7 +169,7 @@ Submit a  transaction:
   transaction Refund {
     o String refund
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }

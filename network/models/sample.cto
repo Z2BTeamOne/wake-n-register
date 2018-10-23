@@ -5,8 +5,8 @@ namespace org.acme.Z2BTestNetwork
 import composer.base.*
 import composer.events.*
 
-participant Buyer identified by buyerID extends Member{
-    o String buyerID
+participant Student identified by studentID extends Member{
+    o String studentID
 }
 participant Seller identified by sellerID extends Member{
     o String sellerID
@@ -46,7 +46,7 @@ asset Order identified by orderNumber {
     o String paid
     --> Provider provider
     --> Shipper shipper
-    --> Buyer buyer
+    --> Student student
     --> Seller seller 
     --> FinanceCo financeCo 
 
@@ -54,18 +54,18 @@ asset Order identified by orderNumber {
   transaction CreateOrder {
     o Integer amount
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction OrderCancel {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction Buy {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction OrderFromSupplier {
@@ -95,14 +95,14 @@ asset Order identified by orderNumber {
   transaction Dispute {
     o String dispute
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction Resolve {
     o String resolve
     --> Order order
-    --> Buyer buyer
+    --> Studetn student
     --> Seller seller
     --> Shipper shipper
     --> Provider provider
@@ -115,7 +115,7 @@ asset Order identified by orderNumber {
 }
   transaction AuthorizePayment {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> FinanceCo financeCo
 }
   transaction Pay {

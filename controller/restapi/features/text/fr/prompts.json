@@ -4,7 +4,7 @@
     "header":"Chapitre 5 : Construire l'experience de l'administrateur",
     "titleBar":"Zero to Blockchain tutoriel",
     "idx_unified":"Charger l'expérience utilisateur unifiée",
-    "idx_buyer":"Charger l'expérience de l'acheteur",
+    "idx_student":"Charger l'expérience de l'acheteur",
     "idx_seller":"Charger l'expérience du vendeur",
     "idx_provider":"Charger l'expérience du fournisseur",
     "idx_shipper":"Charger l'expérience de lexpéditeur",
@@ -67,7 +67,7 @@
     "bc_gh_api":"Charger l'historique",
     "bc_gh_param":"(aucun)"
     },
-    "buyer": {
+    "student": {
     "title":"Chapitre 6 acheteur. Sélectionner l'acheteur pour voir leur vue:",
     "newOrder":"Créér une nouvelle commande",
     "orderStatus":"Afficher le status des Commandes"
@@ -92,7 +92,7 @@
     },
     "createMember": {
     "cd_type":"Type",
-    "cd_buyer":"Acheteur",
+    "cd_student":"Acheteur",
     "cd_seller":"Vendeur",
     "cd_shipper":"Expéditeur",
     "cd_provider":"Fournisseur",
@@ -191,7 +191,7 @@
     "p_no_order_msg":"Pas de commande pour ce fournisseur:",
     "sh_no_order_msg":"Pas de commande pour cet expéditeur:",
     "create_msg":"Création demande de commande en cours",
-    "buyer":"Acheteur:"
+    "student":"Acheteur:"
     },
     "financeCoOrder": {
     "status":"Status actuel:",

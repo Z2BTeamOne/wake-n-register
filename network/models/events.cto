@@ -34,31 +34,31 @@ event ordered extends BasicEvent {
   o String orderID
 }
 
-// notify seller, buyer that items are on backorder 
+// notify seller, student that items are on backorder 
 event backordered extends BasicEvent {
   o String orderNumber
   o String sellerID
   o String orderID
 }
 
-// notify seller, buyer, shipper that shipper has been contacted 
+// notify seller, student, shipper that shipper has been contacted 
 event shipRequest extends BasicEvent {
   o String orderNumber
   o String shipperID
   o String orderID
 }
 
-// notify seller, supplier, buyer that order has been delivered
+// notify seller, supplier, student that order has been delivered
 event delivering extends BasicEvent {
   o String orderNumber
-  o String buyerID
+  o String studentID
   o String orderID
 }
 
-// notify seller, supplier, buyer that order has been delivered
+// notify seller, supplier, student that order has been delivered
 event delivered extends BasicEvent {
   o String orderNumber
-  o String buyerID
+  o String studentID
   o String orderID
 }
 
@@ -76,14 +76,14 @@ event resolved extends BasicEvent {
   o String orderID
 }
 
-// notify financeCo, buyer that a request for payment has been issued 
+// notify financeCo, student that a request for payment has been issued 
 event requestPayment extends BasicEvent {
-  o String buyerID
+  o String studentID
   o String orderID
   o String orderNumber
 }
 
-// notify seller, buyer that order has been paid /
+// notify seller, student that order has been paid /
 event Paid extends BasicEvent {
   o String sellerID
   o String orderID

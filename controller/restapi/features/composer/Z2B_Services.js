@@ -43,7 +43,8 @@ var  Z2Blockchain  = {
  * create an empty order. This is used by any server side routine that needs to create an new
  * empty order.
  * @param {createOrderTemplate} _inbound - Order created with factory.newResource(NS, 'Order',.orderNumber)
- * @returns {Order} - updated order item with all required fields except for relationships (buyer, seller)
+ * @returns {Order} - updated order item with all required fields
+ * except for relationships (student, seller)
  * @utility
  */
     createOrderTemplate: function (_inbound)
@@ -60,14 +61,10 @@ var  Z2Blockchain  = {
         _inbound.requestShipment = '';
         _inbound.delivered = '';
         _inbound.delivering = '';
-        _inbound.disputeOpened = '';
-        _inbound.disputeResolved = '';
         _inbound.orderRefunded = '';
         _inbound.paymentRequested = '';
         _inbound.paid = '';
         _inbound.approved = '';
-        _inbound.dispute = '';
-        _inbound.resolve = '';
         _inbound.backorder = '';
         _inbound.refund = '';
         _inbound.provider = '';
@@ -187,7 +184,8 @@ var  Z2Blockchain  = {
  * update an empty order with 4 items. update the amount field based on the sum of the line items
  * @param {addItems} _inbound - Order created with factory.newResource(NS, 'Order',.orderNumber)
  * @param {itemTable} _itemTable - arry of existing items
- * @returns {Order} - updated order item with all required fields except for relationships (buyer, seller)
+ * @returns {Order} - updated order item with all required fields
+ * except for relationships (student, seller)
  * @utility
  */
     addItems: function (_inbound, _itemTable)
@@ -222,7 +220,7 @@ var  Z2Blockchain  = {
         var _obj = {};
         for (let each in orderElements){(function(_idx, _arr)
         { _obj[_arr[_idx]] = _order[_arr[_idx]]; })(each, orderElements)}
-        _obj.buyer = _order.buyer.$identifier;
+        _obj.student = _order.student.$identifier;
         _obj.seller = _order.seller.$identifier;
         _obj.provider = _order.seller.$provider;
         _obj.shipper = _order.seller.$shipper;
@@ -243,7 +241,7 @@ var  Z2Blockchain  = {
         Delivered: {code: 6, text: 'Order Delivered'},
         Delivering: {code: 15, text: 'Order being Delivered'},
         Backordered: {code: 7, text: 'Order Backordered'},
-        Dispute: {code: 8, text: 'Order Disputed'},
+//        Dispute: {code: 8, text: 'Order Disputed'},
         Resolve: {code: 9, text: 'Order Dispute Resolved'},
         PayRequest: {code: 10, text: 'Payment Requested'},
         Authorize: {code: 11, text: 'Payment Approved'},

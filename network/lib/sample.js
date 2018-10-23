@@ -17,12 +17,12 @@ var orderStatus = {
     Bought: {code: 2, text: 'Order Purchased'},
     Cancelled: {code: 3, text: 'Order Cancelled'},
     Ordered: {code: 4, text: 'Order Submitted to Provider'},
-    ShipRequest: {code: 5, text: 'Shipping Requested'},
-    Delivered: {code: 6, text: 'Order Delivered'},
-    Delivering: {code: 15, text: 'Order being Delivered'},
-    Backordered: {code: 7, text: 'Order Backordered'},
-    Dispute: {code: 8, text: 'Order Disputed'},
-    Resolve: {code: 9, text: 'Order Dispute Resolved'},
+//    ShipRequest: {code: 5, text: 'Shipping Requested'},
+//    Delivered: {code: 6, text: 'Order Delivered'},
+//    Delivering: {code: 15, text: 'Order being Delivered'},
+//    Backordered: {code: 7, text: 'Order Backordered'},
+//    Dispute: {code: 8, text: 'Order Disputed'},
+//    Resolve: {code: 9, text: 'Order Dispute Resolved'},
     PayRequest: {code: 10, text: 'Payment Requested'},
     Authorize: {code: 11, text: 'Payment Approved'},
     Paid: {code: 14, text: 'Payment Processed'},
@@ -36,7 +36,7 @@ var orderStatus = {
  * @transaction
  */
 function CreateOrder(purchase) {
-    purchase.order.buyer = purchase.buyer;
+    purchase.order.student = purchase.student;
     purchase.order.amount = purchase.amount;
     purchase.order.financeCo = purchase.financeCo;
     purchase.order.created = new Date().toISOString();
@@ -54,7 +54,7 @@ function CreateOrder(purchase) {
 function Buy(purchase) {
     if (purchase.order.status == JSON.stringify(orderStatus.Created))
     {
-        purchase.order.buyer = purchase.buyer;
+        purchase.order.student = purchase.student;
         purchase.order.seller = purchase.seller;
         purchase.order.bought = new Date().toISOString();
         purchase.order.status = JSON.stringify(orderStatus.Bought);
@@ -72,7 +72,7 @@ function Buy(purchase) {
 function OrderCancel(purchase) {
     if ((purchase.order.status == JSON.stringify(orderStatus.Created)) || (purchase.order.status == JSON.stringify(orderStatus.Bought)))
     {
-        purchase.order.buyer = purchase.buyer;
+        purchase.order.student = purchase.student;
         purchase.order.seller = purchase.seller;
         purchase.order.cancelled = new Date().toISOString();
         purchase.order.status = JSON.stringify(orderStatus.Cancelled);
@@ -197,25 +197,11 @@ function Pay(purchase) {
         });
 }
  /**
- * Record a dispute by the buyer
- * @param {org.acme.Z2BTestNetwork.Dispute} purchase - the order to be processed
- * @transaction
- */
-function Dispute(purchase) {
-        purchase.order.status = JSON.stringify(orderStatus.Dispute);
-        purchase.order.dispute = purchase.dispute;
-        purchase.order.disputeOpened = new Date().toISOString();
-    return getAssetRegistry('org.acme.Z2BTestNetwork.Order')
-        .then(function (assetRegistry) {
-            return assetRegistry.update(purchase.order);
-        });
-}
- /**
  * Resolve a seller initiated dispute
  * @param {org.acme.Z2BTestNetwork.Resolve} purchase - the order to be processed
  * @transaction
  */
-function Resolve(purchase) {
+function xResolve(purchase) {
         purchase.order.status = JSON.stringify(orderStatus.Resolve);
         purchase.order.resolve = purchase.resolve;
         purchase.order.disputeResolved = new Date().toISOString();
@@ -225,7 +211,7 @@ function Resolve(purchase) {
         });
 }
  /**
- * Record a refund to the buyer
+ * Record a refund to the student
  * @param {org.acme.Z2BTestNetwork.Refund} purchase - the order to be processed
  * @transaction
  */

@@ -17,7 +17,7 @@ var connectionProfileName = "z2b-test-profile";
 var networkFile = "zerotoblockchain-network.bna"
 var businessNetwork = "zerotoblockchain-network";
 
-var buyers, sellers, providers, shippers;
+var students, sellers, providers, shippers;
 var s_string, p_string, sh_string;
 
 var orderStatus = {
@@ -26,11 +26,11 @@ var orderStatus = {
   Cancelled: {code: 3, text: 'Order Cancelled'},
   Ordered: {code: 4, text: 'Order Submitted to Provider'},
   ShipRequest: {code: 5, text: 'Shipping Requested'},
-  Delivered: {code: 6, text: 'Order Delivered'},
-  Delivering: {code: 15, text: 'Order being Delivered'},
-  Backordered: {code: 7, text: 'Order Backordered'},
-  Dispute: {code: 8, text: 'Order Disputed'},
-  Resolve: {code: 9, text: 'Order Dispute Resolved'},
+//  Delivered: {code: 6, text: 'Order Delivered'},
+//  Delivering: {code: 15, text: 'Order being Delivered'},
+//  Backordered: {code: 7, text: 'Order Backordered'},
+//  Dispute: {code: 8, text: 'Order Disputed'},
+//  Resolve: {code: 9, text: 'Order Dispute Resolved'},
   PayRequest: {code: 10, text: 'Payment Requested'},
   Authorize: {code: 11, text: 'Payment Approved'},
   Paid: {code: 14, text: 'Payment Processed'},

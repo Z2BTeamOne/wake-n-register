@@ -4,7 +4,7 @@
     "header":"Capítulo 5: Construyendo la experiencia del usuario administrativa",
     "titleBar":"Cero al tutorial de Blockchain",
     "idx_unified":"Cargar experiencia de usuario unificada",
-    "idx_buyer":"Cargar la experiencia del usuario del comprador",
+    "idx_student":"Cargar la experiencia del usuario del comprador",
     "idx_seller":"Cargar experiencia de usuario del vendedor",
     "idx_provider":"Cargar experiencia de usuario del proveedor",
     "idx_shipper":"Cargar experiencia de usuario del transportista",
@@ -67,7 +67,7 @@
     "bc_gh_api":"obtener un historiador",
     "bc_gh_param":"(ninguna)"
     },
-    "buyer": {
+    "student": {
     "title":"Comprador Capítulo 06. Seleccione Comprador para ver su vista:",
     "newOrder":"Crear nuevo orden",
     "orderStatus":"Mostrar estado del pedido"
@@ -92,7 +92,7 @@
     },
     "createMember": {
     "cd_type":"Tipo",
-    "cd_buyer":"Comprador",
+    "cd_student":"Comprador",
     "cd_seller":"Vendedor",
     "cd_shipper":"Expedidor",
     "cd_provider":"Proveedor",
@@ -191,7 +191,7 @@
     "p_no_order_msg":"No hay pedidos para este proveedor:",
     "sh_no_order_msg":"No hay pedidos para este remitente:",
     "create_msg":"Procesando Crear solicitud de pedido",
-    "buyer":"Comprador:"
+    "student":"Comprador:"
     },
     "financeCoOrder": {
     "status":"Estatus actual",
