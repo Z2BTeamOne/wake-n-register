@@ -13,18 +13,32 @@
  */
 
 'use strict';
-var fs = require('fs');
-var path = require('path');
+let fs = require('fs');
+let path = require('path');
 const sleep = require('sleep');
+var request = require('request');
 
-const ws = require('websocket');
-const http = require('http');
+// const ws = require('websocket');
+// const http = require('http');
+// const url = require('url');
 const express = require('express');
 const app = express();
 const cfenv = require('cfenv');
 const appEnv = cfenv.getAppEnv();
+const util = require('./Z2B_Utilities');
 app.set('port', appEnv.port);
-
+let protocolToUse;
+if (cfenv.getAppEnv().isLocal)
+{
+    console.log(" Z2B is running locally");
+    protocolToUse = "http";
+}
+else
+{
+    console.log("Z2B is running in cloud");
+    protocolToUse = "https";
+}
+const restartDate = new Date().toISOString();
 
 
 /**
@@ -37,7 +51,7 @@ app.set('port', appEnv.port);
  * @class
  * @memberof module:Z2Blockchain
  */
-var  Z2Blockchain  = {
+let  Z2Blockchain  = {
 
 /**
  * create an empty order. This is used by any server side routine that needs to create an new
@@ -105,8 +119,8 @@ var  Z2Blockchain  = {
 /**
  * update item quantity. used by the autoLoad process.
  * @param {item_number} _itemNo - item number to find
- * @param {vendor_array} _itemArray - item array from order
  * @param {item_number} _qty - quantity to change * @utility
+ * @param {vendor_array} _itemArray - item array from order
  */
     setItem: function (_itemNo, _qty, _itemArray)
     {
@@ -115,43 +129,203 @@ var  Z2Blockchain  = {
     },
 /**
  * supplemental routine to resubmit orders when MVCC_READ_CONFLICT encountered
+ * @param {object} _con - web socket connection
  * @param {transaction} _item - transaction to process
  * @param {order_object} _id - order id
- * @param {bnc} businessNetworkConnection - already created business network connection
+ * @param {BusinessNetworkConnection} businessNetworkConnection - already created business network connection
+ * @returns {promise} promise
  */
     loadTransaction: function (_con, _item, _id, businessNetworkConnection)
     {
+        let methodName = 'loadTransaction';
         return businessNetworkConnection.submitTransaction(_item)
         .then(() => {
-            console.log('loadTransaction: order '+_id+' successfully added'); 
-            _con.sendUTF('loadTransaction: order '+_id+' successfully added');
+            console.log(methodName+': order '+_id+' successfully added ');
+            this.send(_con, 'Message', 'Order '+_id+' successfully added');
         })
         .catch((error) => {
-            if (error.message.search('MVCC_READ_CONFLICT') != -1)
+            if (error.message.search('MVCC_READ_CONFLICT') !== -1)
                 {sleep.sleep(5);
-                    console.log(_id+" loadTransaction retrying submit transaction for: "+_id);
-                    this.loadTransaction(_con,_item, _id, businessNetworkConnection);
-                }
-            });
+                console.log(_id+' loadTransaction retrying submit transaction for: '+_id);
+                this.loadTransaction(_con, _item, _id, businessNetworkConnection);
+            }
+        });
     },
 /**
  * add an order to a registry. This adds an Asset and does not execute a transaction
- * @param {order_object} _order - order_object to process
- * @param {assetRegistry} _registry - registry into which asset (order) should be placed
+ * @param {order_object} _con - websocket
+ * @param {assetRegistry} _order - order_object to process
+ * @param {networkTransaction} _registry - registry into which asset (order) should be placed
  * @param {networkTransaction} _createNew - transaction to be processed after order successfully added
- * @param {businessNetworkConnection} _bnc - business network connection to use */
+ * @param {businessNetworkConnection} _bnc - business network connection to use
+ * @returns {promise} promise
+ */
     addOrder: function (_con, _order, _registry, _createNew, _bnc)
     {
+        let methodName = 'addOrder';
         return _registry.add(_order)
         .then(() => {
-            this.loadTransaction(_con,_createNew, _order.orderNumber, _bnc);
+            this.loadTransaction(_con, _createNew, _order.orderNumber, _bnc);
         })
         .catch((error) => {
-        if (error.message.search('MVCC_READ_CONFLICT') != -1)
-            {console.log(_order.orderNumber+" addOrder retrying assetRegistry.add for: "+_order.orderNumber);
-            this.addOrder(_con,_order, _registry, _createNew, _bnc);
+            if (error.message.search('MVCC_READ_CONFLICT') !== -1)
+            {console.log(_order.orderNumber+' addOrder retrying assetRegistry.add for: '+_order.orderNumber);
+                this.addOrder(_con, _order, _registry, _createNew, _bnc);
             }
-            else {console.log('error with assetRegistry.add', error)}
+            else {console.log(methodName+' error with assetRegistry.add', error);}
+        });
+    },
+
+/**
+ * repeats the bind identity request
+ * @param {WebSocket} _con - order_object to process
+ * @param {String} _id - registry into which asset (order) should be placed
+ * @param {String} _cert - transaction to be processed after order successfully added
+ * @param {BusinessNetworkConnection} _bnc - business network connection to use
+ * @returns {promise} promise
+ */
+    bindIdentity: function (_con, _id, _cert, _bnc)
+    {
+        let methodName = 'bindIdentity';
+        console.log(methodName+' retrying bindIdentity for: '+_id);
+        return _bnc.bindIdentity(_id, _cert)
+        .then(() => {
+            console.log(methodName+' Succeeded for: '+_id);
+        })
+        .catch((error) => {
+            if (error.message.search('MVCC_READ_CONFLICT') !== -1)
+            {console.log(' bindIdentity retrying _bnc.bindIdentity(_id, _cert) for: '+_id);
+                this.bindIdentity(_con, _id, _cert,  _bnc);
+            }
+            else {console.log(methodName+' error with _bnc.bindIdentity(_id, _cert) for: '+_id+' with error: ', error);}
+        });
+    },
+/**
+ * saves the member table with ids and secrets
+ * @param {string} _dbName  - string, name of database to access
+ * @param {String} _key - key field for this record
+ * @param {String} _host - host url
+ */
+    getThisMember: function (_locals, _dbName, _key, _host)
+    {
+        let methodName = 'getThisMember';
+        console.log(methodName+' entered for '+_dbName+' with key: '+_key);
+        return new Promise(function(resolve, reject) 
+        {
+            let options = {};
+            options.name = _dbName;
+            options.oid = _key;
+            var url = protocolToUse+'://'+_host+'/db/getOne';
+            var method = "POST";
+            console.log(methodName+' requesting from url: '+url+' with options: ', options);
+            request( { url: url, json: options, method: method },
+            function(error, response, body) 
+            {
+                if (typeof(body.success) != 'undefined') 
+                {console.log(methodName+" "+_key+" retrieved successfully"); resolve(body.success);}
+                else
+                {console.log(methodName+' error body: ', body);  reject(body);}
+            });
+        });
+},
+/**
+ * saves the member table with ids and secrets
+ * @param {string} _dbName  - string, name of database to access
+ * @param {JSON} _item - data to store in dbName
+ * @param {String} _key - key field for this record
+ * @param {String} _host - host url
+ */
+saveToDB: function (_dbName, _item, _key, _host)
+{
+    let methodName = 'saveToDB';
+    let _this = this;
+    _item.lastUpdated=restartDate;
+    let options = {};
+    options.name = _dbName;
+    options.content = _item;
+    options.content._id = _key;
+    var url = protocolToUse+'://'+_host+'/db/insert';
+    var method = "POST";
+    request( { url: url, json: options, method: method },
+    function(error, response, body) 
+    {
+        if ((typeof(body.success) != 'undefined') && (body.success.ok == 'true'))
+        {console.log(body.id+" stored in db successfully");}
+        else
+        {
+            // { success: { error: 'conflict', reason: 'Document update conflict.' } }
+            // this occurs when the network has been reloaded and the database still has the previous
+            // version information
+            if ((typeof(body.success.error) != 'undefined') && (body.success.error == 'conflict'))
+            {
+                _this.updateDB (_dbName, _item, _key, _host)
+            }
+            else {console.log(methodName+' error body: ', body);}
+        }
+    });
+},
+/**
+ * saves the member table with ids and secrets
+ * @param {string} _dbName  - string, name of database to access
+ * @param {JSON} _item - data to store in dbName
+ * @param {String} _key - key field for this record
+ * @param {String} _host - host url
+ */
+    updateDB: function (_dbName, _item, _key, _host)
+    {
+        let methodName = 'updateDB';
+        _item.lastUpdated=restartDate;
+        let options = {};
+        options.name = _dbName;
+        options.content = _item;
+        options.oid = _key;
+        var url = protocolToUse+'://'+_host+'/db/update';
+        var method = "POST";
+        request( { url: url, json: options, method: method },
+        function(error, response, body) 
+        {
+            // updateDB error body:  { success:  { ok: true, id: 'abdul@cognitiveadvantageinc.com', rev: '2-b42cdc8bfa78e8e62d11947e4357a0d4' } }
+            if ((typeof(body.success) != 'undefined') && (body.success.ok == true))
+            {console.log(body.success.id+" updated in db successfully");}
+            else
+            {
+                console.log(methodName+' error body: ', body);
+            }
+        });
+    },
+/**
+ * saves the member table with ids and secrets
+ * @param {string} _dbName  - string, name of database to create if missing
+ * @param {String} _host - host url
+ */
+    connectToDB: function (_dbName, _host)
+    {
+        let methodName = 'connectToDB';
+        return new Promise(function(resolve, reject) 
+        {
+            let options = {};
+            options.name = _dbName;
+            var url = protocolToUse+'://'+_host+'/db/createTable';
+            var method = "POST";
+            request( { url: url, json: options, method: method },
+            function(error, response, body) 
+            {
+                if ((typeof(body.success) != 'undefined') && (body.success.ok == 'true'))
+                {console.log(_dbName+" created successfully"); resolve("success");}
+                else
+                {
+                    if ((typeof(body.error) != 'undefined') && (body.error == 'file_exists'))
+                    {
+                        console.log(_dbName+' database already exists');
+                        resolve("success");
+                    }
+                    else
+                    {
+                        console.log(methodName+' error is: ', error);
+                        reject(error);
+                    }
+                }
+            });
         });
     },
 
@@ -166,21 +340,24 @@ var  Z2Blockchain  = {
         let _mem = '{"members": [';
         for (let each in _table)
             {(function(_idx, _arr)
-                {if(_idx>0){_mem += ', ';} _mem +=JSON.stringify(_arr[_idx]);})(each, _table)}
+                {if(_idx>0){_mem += ', ';} _mem +=JSON.stringify(_arr[_idx]);})(each, _table);}
         _mem += ']}';
         fs.writeFileSync(newFile, _mem, options);
     },
 /**
  * saves the item table * @param {array} _table - array of JSON objects to save to file
+ * @param {JSON} _table - data to be saved
  */
     saveItemTable: function (_table)
     {
+        console.log('_table: ', _table);
         let options = { flag : 'w' };
         let newFile = path.join(path.dirname(require.main.filename),'startup','itemList.txt');
         let _mem = '{"items": [';
         for (let each in _table)
-            {(function(_idx, _arr){if(_idx>0){_mem += ', ';} _mem += JSON.stringify(_arr[_idx]);})(each, _table)}
+            {(function(_idx, _arr){if(_idx>0){_mem += ', ';} _mem += JSON.stringify(_arr[_idx]);})(each, _table);}
         _mem += ']}';
+        console.log('_mem: ', _mem);
         fs.writeFileSync(newFile, _mem, options);
     },
 /**
@@ -198,30 +375,30 @@ var  Z2Blockchain  = {
         for (let each in _inbound.items)
             {(function(_idx, _arr)
                 {
-                    let _item = _this.getItem(_arr[_idx].itemNo, _itemTable);
-                    _this.setItem(_arr[_idx].itemNo, _arr[_idx].quantity, _itemTable);
-                    _arr[_idx].description = _item.itemDescription;
-                    _arr[_idx].unitPrice = _item.unitPrice;
-                    _arr[_idx].extendedPrice = _item.unitPrice*_arr[_idx].quantity;
-                    _amount += _arr[_idx].extendedPrice;
-                    _items.push(JSON.stringify(_arr[_idx]));
-                })(each, _inbound.items)}
+                let _item = _this.getItem(_arr[_idx].itemNo, _itemTable);
+                _this.setItem(_arr[_idx].itemNo, _arr[_idx].quantity, _itemTable);
+                _arr[_idx].description = _item.itemDescription;
+                _arr[_idx].unitPrice = _item.unitPrice;
+                _arr[_idx].extendedPrice = _item.unitPrice*_arr[_idx].quantity;
+                _amount += _arr[_idx].extendedPrice;
+                _items.push(JSON.stringify(_arr[_idx]));
+            })(each, _inbound.items);}
         return ({'items': _items, 'amount': _amount});
     },
 /**
- * formats an Order into a reusable json object. work-around because serializer 
+ * formats an Order into a reusable json object. work-around because serializer
  * was not initially working. This function is no longer in use.
  * @param {Order} _order - the inbound Order item retrieved from a registry
- * @return JSON object order elements
+ * @return {Order} JSON object order elements
  * @function
  */
     getOrderData: function (_order)
     {
         let orderElements = ['items', 'status', 'amount', 'created', 'cancelled', 'bought', 'ordered', 'dateBackordered', 'requestShipment', 'delivered', 'delivering', 'approved',
         'disputeOpened', 'disputeResolved', 'paymentRequested', 'orderRefunded', 'paid', 'dispute', 'resolve', 'backorder', 'refund'];
-        var _obj = {};
+        let _obj = {};
         for (let each in orderElements){(function(_idx, _arr)
-        { _obj[_arr[_idx]] = _order[_arr[_idx]]; })(each, orderElements)}
+        { _obj[_arr[_idx]] = _order[_arr[_idx]]; })(each, orderElements);}
         _obj.buyer = _order.buyer.$identifier;
         _obj.seller = _order.seller.$identifier;
         _obj.provider = _order.seller.$provider;
@@ -231,7 +408,7 @@ var  Z2Blockchain  = {
     },
 
 /**
- * JSON object of available order status types and codes. This is used by nodejs 
+ * JSON object of available order status types and codes. This is used by nodejs
  * server side code to correctly update order status with identical codes and text.
  */
     orderStatus: {
@@ -252,67 +429,15 @@ var  Z2Blockchain  = {
         Refunded: {code: 13, text: 'Order Refunded'}
     },
 /**
- * the user experience is enhanced if the browser can be notified of aysnchronous events. 
- * the createMessateSockt function creates a web socket service to which the browser can
- * attach. 
- * @param {integer} _port - port number to use for this socket connection
- * @returns {websocket} - web socket connection to be used on the server side.
+ * New code to support sending messages to socket clients
+ * @param {Object} _locals - shared variables and functions from index.js
+ * @param {String} type - type of event message to put on channel
+ * @param {Event} event - event message
  */
-    m_connection: null,
-    m_socketAddr: null,
-    m_socket: null,
-    createMessageSocket: function (_port)
+    send: function (_locals, type, event)
     {
-        var port = (typeof(_port) == 'undefined' || _port == null) ? app.get('port')+1 : _port
-        if (this.m_socket == null)
-        {
-            this.m_socketAddr = port;
-            this.m_socket= new ws.server({httpServer: http.createServer().listen(this.m_socketAddr)});
-            var _this = this;            
-            this.m_socket.on('request', function(request) 
-            {
-                _this.m_connection = request.accept(null, request.origin);
-                _this.m_connection.on('message', function(message)
-                {
-                    console.log(message.utf8Data);
-                    _this.m_connection.sendUTF('connected');
-                    _this.m_connection.on('close', function(m_connection) {console.log('m_connection closed'); });
-                });
-            });
-        }
-        return {conn: this.m_connection, socket: this.m_socketAddr};
-    },
-/**
- * the cs_connection is used to display blockchain information to the web browser over
- * a sepaarate port from the user experience socket. 
- * @returns {websocket} - web socket connection to be used on the server side.
- */
-
-    cs_connection: null,
-    cs_socketAddr: null,
-    cs_socket: null,
-    createChainSocket: function ()
-    {
-        var port =  app.get('port')+2;
-        if (this.cs_socket == null)
-        {
-            this.cs_socketAddr = port;
-            this.cs_socket= new ws.server({httpServer: http.createServer().listen(this.cs_socketAddr)});
-            var _this = this;            
-            this.cs_socket.on('request', function(request) 
-            {
-                _this.cs_connection = request.accept(null, request.origin);
-                _this.cs_connection.on('message', function(message)
-                {
-                    console.log(message.utf8Data);
-                    _this.cs_connection.sendUTF('connected');
-                    _this.cs_connection.on('close', function(cs_connection) {console.log('cs_connection closed'); });
-                });
-            });
-        }
-        return {conn: this.cs_connection, socket: this.cs_socketAddr};
+        _locals.processMessages({'type': type, 'data': event} );
     }
-
-}
+};
 
 module.exports = Z2Blockchain;
