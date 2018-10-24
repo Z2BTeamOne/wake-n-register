@@ -69,7 +69,7 @@ event dispute extends BasicEvent {
   o String orderID
 }
 
-// notify seller, buyer that dispute has been resolved 
+// notify seller, student that dispute has been resolved 
 event resolved extends BasicEvent {
   o String orderNumber
   o String sellerID

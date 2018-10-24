@@ -11,7 +11,7 @@
         {"type": "Seller", "pw": "alwayson", "companyName": "NonStop, Inc", "id": "alwayson@nonstopinc.com"},
         {"type": "Seller", "pw": "anytime", "companyName": "Virtual Paper, Inc", "id": "anytime@virtualpaperinc.com"},
         {"type": "Student", "pw": "yes", "companyName": "Software Solutions, Inc", "id": "yes@softwaresolutionsinc.com"},
-        {"type": "Student", "pw": "buyer1", "companyName": "Hybrid Cloud Designs, Inc", "id": "buyer1@hybridclouddesignsinc.com"},
+        {"type": "Student", "pw": "student1", "companyName": "Hybrid Cloud Designs, Inc", "id": "buyer1@hybridclouddesignsinc.com"},
         {"type": "Student", "pw": "eric", "companyName": "Born On The Cloud, Inc", "id": "eric@bornonthecloudinc.com"},
         {"type": "Student", "pw": "abby", "companyName": "Kid Friendly Learning, Inc", "id": "abby@kidfriendlyinc.com"},
         {"type": "Student", "pw": "kristen", "companyName": "The Education Game, Inc", "id": "kristen@gameify.com"},

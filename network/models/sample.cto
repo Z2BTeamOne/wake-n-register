@@ -102,7 +102,7 @@ asset Order identified by orderNumber {
   transaction Resolve {
     o String resolve
     --> Order order
-    --> Studetn student
+    --> Student student
     --> Seller seller
     --> Shipper shipper
     --> Provider provider
