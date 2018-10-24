@@ -306,7 +306,7 @@ exports.addOrder = function (req, res, next) {
         const createNew = factory.newTransaction(NS, 'CreateOrder');
 
         createNew.order = factory.newRelationship(NS, 'Order', order.$identifier);
-        createNew.student = factory.newRelationship(NS, 'Student', req.body.student`);
+        createNew.student = factory.newRelationship(NS, 'Student', req.body.student);
         createNew.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
         createNew.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
         createNew.amount = order.amount;
