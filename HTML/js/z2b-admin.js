@@ -537,10 +537,10 @@ function listAssets()
         _str += '<h4>Network update results: '+_results.result+'</h4>';
         if (_results.result === 'success')
         {
-            _str += '<table width="100%"><tr><th>Order Number</th><th>Created</th><th>Status</th><th>Buyer/Seller</th><th>Amount</th></tr>';
+            _str += '<table width="100%"><tr><th>Order Number</th><th>Created</th><th>Status</th><th>Student/Seller</th><th>Amount</th></tr>';
             for (let each in _results.orders)
             {(function(_idx, _arr){
-                _str += '<tr><td align="center">'+_arr[_idx].id+'</td><td>'+_arr[_idx].created+'</td><td>'+JSON.parse(_arr[_idx].status).text+'</td><td>'+_arr[_idx].buyer+'<br/>'+_arr[_idx].seller+'</td><td align="right">$'+_arr[_idx].amount+'.00</td></tr>';
+                _str += '<tr><td align="center">'+_arr[_idx].id+'</td><td>'+_arr[_idx].created+'</td><td>'+JSON.parse(_arr[_idx].status).text+'</td><td>'+_arr[_idx].student+'<br/>'+_arr[_idx].seller+'</td><td align="right">$'+_arr[_idx].amount+'.00</td></tr>';
             })(each, _results.orders);}
             _str += '</ul>';
         } else {_str += '<br/>'+_results.error;}

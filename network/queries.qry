@@ -7,8 +7,8 @@ query selectOrders {
       SELECT org.acme.Z2BTestNetwork.Order
 }
 
-query selectOrdersByBuyer {
-  description: "Select all orders for a specific buyer"
+query selectOrdersByStudent {
+  description: "Select all orders for a specific student"
   statement:
       SELECT org.acme.Z2BTestNetwork.Order
           WHERE (seller.sellerID == _$id)

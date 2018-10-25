@@ -26,10 +26,10 @@ const financeCoID = 'easymoney@easymoneyinc.com';
 let bRegistered = false;
 
 /**
- * get orders for buyer with ID =  _id
+ * get orders for student with ID =  _id
  * @param {express.req} req - the inbound request object from the client
- *  req.body.id - the id of the buyer making the request
- *  req.body.userID - the user id of the buyer in the identity table making this request
+ *  req.body.id - the id of the student making the request
+ *  req.body.userID - the user id of the student in the identity table making this request
  *  req.body.secret - the pw of this user.
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
@@ -103,15 +103,15 @@ exports.getItemTable = function (req, res, next)
 };
 
 /**
- * orderAction - act on an order for a buyer
+ * orderAction - act on an order for a student
  * @param {express.req} req - the inbound request object from the client
- * req.body.action - string with buyer requested action
- * buyer available actions are:
+ * req.body.action - string with student requested action
+ * student available actions are:
  * Pay  - approve payment for an order
  * Dispute - dispute an existing order. requires a reason
  * Purchase - submit created order to seller for execution
  * Cancel - cancel an existing order
- * req.body.participant - string with buyer id
+ * req.body.participant - string with student id
  * req.body.orderNo - string with orderNo to be acted upon
  * req.body.reason - reason for dispute, required for dispute processing to proceed
  * @param {express.res} res - the outbound response object for communicating back to client
@@ -157,14 +157,14 @@ exports.orderAction = function (req, res, next) {
                     console.log('Dispute entered');
                     updateOrder = factory.newTransaction(NS, 'Dispute');
                     updateOrder.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
-                    updateOrder.buyer = factory.newRelationship(NS, 'Buyer', order.buyer.$identifier);
+                    updateOrder.student = factory.newRelationship(NS, 'Student', order.student.$identifier);
                     updateOrder.seller = factory.newRelationship(NS, 'Seller', order.seller.$identifier);
                     updateOrder.dispute = req.body.reason;
                     break;
                 case 'Purchase':
                     console.log('Purchase entered');
                     updateOrder = factory.newTransaction(NS, 'Buy');
-                    updateOrder.buyer = factory.newRelationship(NS, 'Buyer', order.buyer.$identifier);
+                    updateOrder.student = factory.newRelationship(NS, 'Student', order.student.$identifier);
                     updateOrder.seller = factory.newRelationship(NS, 'Seller', order.seller.$identifier);
                     break;
                 case 'Order From Supplier':
@@ -189,7 +189,7 @@ exports.orderAction = function (req, res, next) {
                 case 'Resolve':
                     console.log('Resolve entered');
                     updateOrder = factory.newTransaction(NS, 'Resolve');
-                    updateOrder.buyer = factory.newRelationship(NS, 'Buyer', order.buyer.$identifier);
+                    updateOrder.student = factory.newRelationship(NS, 'Student', order.student.$identifier);
                     updateOrder.shipper = factory.newRelationship(NS, 'Shipper', order.shipper.$identifier);
                     updateOrder.provider = factory.newRelationship(NS, 'Provider', order.provider.$identifier);
                     updateOrder.seller = factory.newRelationship(NS, 'Seller', order.seller.$identifier);
@@ -223,13 +223,13 @@ exports.orderAction = function (req, res, next) {
                 case 'Authorize Payment':
                     console.log('Authorize Payment entered');
                     updateOrder = factory.newTransaction(NS, 'AuthorizePayment');
-                    updateOrder.buyer = factory.newRelationship(NS, 'Buyer', order.buyer.$identifier);
+                    updateOrder.student = factory.newRelationship(NS, 'Student', order.student.$identifier);
                     updateOrder.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
                     break;
                 case 'Cancel':
                     console.log('Cancel entered');
                     updateOrder = factory.newTransaction(NS, 'OrderCancel');
-                    updateOrder.buyer = factory.newRelationship(NS, 'Buyer', order.buyer.$identifier);
+                    updateOrder.student = factory.newRelationship(NS, 'Student', order.student.$identifier);
                     updateOrder.seller = factory.newRelationship(NS, 'Seller', order.seller.$identifier);
                     break;
                 default :
@@ -270,7 +270,7 @@ exports.orderAction = function (req, res, next) {
  * adds an order to the blockchain
  * @param {express.req} req - the inbound request object from the client
  * req.body.seller - string with seller id
- * req.body.buyer - string with buyer id
+ * req.body.student - string with student id
  * req.body.items - array with items for order
  * @param {express.res} res - the outbound response object for communicating back to client
  * @param {express.next} next - an express service to enable post processing prior to responding to the client
@@ -279,26 +279,26 @@ exports.orderAction = function (req, res, next) {
  */
 exports.addOrder = function (req, res, next) {
     let method = 'addOrder';
-    console.log(method+' req.body.buyer is: '+req.body.buyer );
+    console.log(method+' req.body.student is: '+req.body.student );
     let businessNetworkConnection;
     let factory;
     let ts = Date.now();
-    let orderNo = req.body.buyer.replace(/@/, '').replace(/\./, '')+ts;
+    let orderNo = req.body.student.replace(/@/, '').replace(/\./, '')+ts;
     if (svc.m_connection === null) {svc.createMessageSocket();}
     businessNetworkConnection = new BusinessNetworkConnection();
     //
     // v0.14
-    // return businessNetworkConnection.connect(config.composer.connectionProfile, config.composer.network, req.body.buyer, req.body.secret)
+    // return businessNetworkConnection.connect(config.composer.connectionProfile, config.composer.network, req.body.student, req.body.secret)
     //
     // v0.15
-    return businessNetworkConnection.connect(req.body.buyer)
+    return businessNetworkConnection.connect(req.body.student)
     .then(() => {
         factory = businessNetworkConnection.getBusinessNetwork().getFactory();
         let order = factory.newResource(NS, 'Order', orderNo);
         order = svc.createOrderTemplate(order);
         order.amount = 0;
         order.orderNumber = orderNo;
-        order.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
+        order.student = factory.newRelationship(NS, 'Student', req.body.student);
         order.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
         order.provider = factory.newRelationship(NS, 'Provider', 'noop@dummy');
         order.shipper = factory.newRelationship(NS, 'Shipper', 'noop@dummy');
@@ -314,7 +314,7 @@ exports.addOrder = function (req, res, next) {
         const createNew = factory.newTransaction(NS, 'CreateOrder');
 
         createNew.order = factory.newRelationship(NS, 'Order', order.$identifier);
-        createNew.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
+        createNew.student = factory.newRelationship(NS, 'Student', req.body.student);
         createNew.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
         createNew.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
         createNew.amount = order.amount;
@@ -370,12 +370,12 @@ function _monitor(locals, _event)
 {
     let method = '_monitor';
     console.log(method+ ' _event received: '+_event.$type+' for Order: '+_event.orderID);
-    // create an event object and give it the event type, the orderID, the buyer id and the eventID
+    // create an event object and give it the event type, the orderID, the student id and the eventID
     // send that event back to the requestor
     let event = {};
     event.type = _event.$type;
     event.orderID = _event.orderID;
-    event.ID = _event.buyerID;
+    event.ID = _event.studentID;
     svc.send(locals, 'Alert',JSON.stringify(event));
 
     // using switch/case logic, send events back to each participant who should be notified. 

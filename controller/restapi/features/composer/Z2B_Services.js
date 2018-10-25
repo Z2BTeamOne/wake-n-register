@@ -45,7 +45,7 @@ let  Z2Blockchain  = {
  * create an empty order. This is used by any server side routine that needs to create an new
  * empty order.
  * @param {createOrderTemplate} _inbound - Order created with factory.newResource(NS, 'Order',.orderNumber)
- * @returns {Order} - updated order item with all required fields except for relationships (buyer, seller)
+ * @returns {Order} - updated order item with all required fields except for relationships (student, seller)
  * @utility
  */
     createOrderTemplate: function (_inbound)
@@ -224,7 +224,7 @@ saveItemTable: function (_table)
  * update an empty order with 4 items. update the amount field based on the sum of the line items
  * @param {addItems} _inbound - Order created with factory.newResource(NS, 'Order',.orderNumber)
  * @param {itemTable} _itemTable - arry of existing items
- * @returns {Order} - updated order item with all required fields except for relationships (buyer, seller)
+ * @returns {Order} - updated order item with all required fields except for relationships (student, seller)
  * @utility
  */
     addItems: function (_inbound, _itemTable)
@@ -260,7 +260,7 @@ getOrderData: function (_order)
     let _obj = {};
     for (let each in orderElements){(function(_idx, _arr)
     { _obj[_arr[_idx]] = _order[_arr[_idx]]; })(each, orderElements);}
-    _obj.buyer = _order.buyer.$identifier;
+    _obj.student = _order.student.$identifier;
     _obj.seller = _order.seller.$identifier;
     _obj.provider = _order.seller.$provider;
     _obj.shipper = _order.seller.$shipper;

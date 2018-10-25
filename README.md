@@ -23,7 +23,7 @@ Chapter 12
   ↳ HTML
     index.html
     admin.html
-    buyer.html                     <== Updated
+    student.html                     <== Updated
     ceateConnectionProfile.html
     createMember.html
     createOrder.html
@@ -39,7 +39,7 @@ Chapter 12
        pageStyles.css
      ↳js
        z2b-admin.js
-       z2b-buyer.js                <== Updated
+       z2b-student.js                <== Updated
        z2b-events.js               <== Updated
        z2b-financeCo.js            <== Updated
        z2b-initiate.js

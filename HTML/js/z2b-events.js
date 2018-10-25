@@ -24,12 +24,12 @@ let wsSocket;
 function singleUX ()
 {
     let toLoad = 'singleUX.html';
-    if ((typeof(buyers) === 'undefined') || (buyers === null) || (buyers.length === 0))
+    if ((typeof(students) === 'undefined') || (students === null) || (students.length === 0))
     { $.when($.get(toLoad), deferredMemberLoad()).done(function (_page, _res)
         {
         $('#body').empty();
         $('#body').append(_page);
-        loadBuyerUX();
+        loadStudentUX();
         loadSellerUX();
         loadProviderUX();
         loadShipperUX();
@@ -42,7 +42,7 @@ function singleUX ()
         {
             $('#body').empty();
             $('#body').append(_page);
-            loadBuyerUX();
+            loadStudentUX();
             loadSellerUX();
             loadProviderUX();
             loadShipperUX();
@@ -60,15 +60,15 @@ function memberLoad ()
     let options = {};
     options.registry = 'Seller';
     let options2 = {};
-    options2.registry = 'Buyer';
+    options2.registry = 'Student';
     let options3 = {};
     options3.registry = 'Provider';
     let options4 = {};
     options4.registry = 'Shipper';
     $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-        $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+        $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _students, _providers, _shippers)
         {
-        buyers = dropDummy(_buyers[0].members);
+        students = dropDummy(_students[0].members);
         sellers = dropDummy(_sellers[0].members);
         providers = dropDummy(_providers[0].members);
         shippers = dropDummy(_shippers[0].members);
@@ -98,15 +98,15 @@ function deferredMemberLoad()
     let options = {};
     options.registry = 'Seller';
     let options2 = {};
-    options2.registry = 'Buyer';
+    options2.registry = 'Student';
     let options3 = {};
     options3.registry = 'Provider';
     let options4 = {};
     options4.registry = 'Shipper';
     $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-        $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+        $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _students, _providers, _shippers)
         {
-            buyers = dropDummy(_buyers[0].members);
+            students = dropDummy(_students[0].members);
             sellers = dropDummy(_sellers[0].members);
             providers = dropDummy(_providers[0].members);
             shippers = dropDummy(_shippers[0].members);
@@ -151,7 +151,7 @@ function addNotification(_event, _id, _orderID)
     if (type === 'none') {return;}
     switch(type)
     {
-    case 'Buyer':
+    case 'Student':
         b_alerts.push({'event': _event, 'order': _orderID});
         toggleAlert(b_notify, b_alerts, b_count);
         break;

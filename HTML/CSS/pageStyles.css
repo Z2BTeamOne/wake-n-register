@@ -125,7 +125,7 @@ body {height: 100%}
     right: 0;
     top: 50%;
 }
-.buyer { background-color: #CBCFD0; }
+.student { background-color: #CBCFD0; }
 .seller { background-color: rgb(173, 242, 173);}
 .provider { background-color: rgb(192, 221, 252);}
 .shipper { background-color: rgb(242, 232, 156);}

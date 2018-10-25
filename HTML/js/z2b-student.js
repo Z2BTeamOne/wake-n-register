@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-// z2c-buyer.js
+// z2c-student.js
 
 'use strict';
-let b_notify = '#buyer_notify';
-let b_count = '#buyer_count';
+let b_notify = '#student_notify';
+let b_count = '#student_count';
 let b_id = '';
 let b_alerts;
 
@@ -26,71 +26,71 @@ let newItems = [];
 let totalAmount = 0;
 
 /**
- * load the Buyer User Experience
+ * load the Student User Experience
  */
-function loadBuyerUX ()
+function loadStudentUX ()
 {
     // get the html page to load
-    let toLoad = 'buyer.html';
-    // if (buyers.length === 0) then autoLoad() was not successfully run before this web app starts, so the sie of the buyer list is zero
+    let toLoad = 'student.html';
+    // if (students.length === 0) then autoLoad() was not successfully run before this web app starts, so the sie of the student list is zero
     // assume user has run autoLoad and rebuild member list
     // if autoLoad not yet run, then member list length will still be zero
-    if ((typeof(buyers) === 'undefined') || (buyers === null) || (buyers.length === 0))
+    if ((typeof(students) === 'undefined') || (students === null) || (students.length === 0))
     { $.when($.get(toLoad), deferredMemberLoad()).done(function (page, res)
-        {setupBuyer(page);});
+        {setupStudent(page);});
         }
         else{
             $.when($.get(toLoad)).done(function (page)
-            {setupBuyer(page);});
+            {setupStudent(page);});
     }
 }
 
-function setupBuyer(page)
+function setupStudent(page)
 {
     // empty the hetml element that will hold this page
-    $('#buyerbody').empty();
-    $('#buyerbody').append(page);
-    // empty the buyer alerts array
+    $('#studentbody').empty();
+    $('#studentbody').append(page);
+    // empty the student alerts array
     b_alerts = [];
     // if there are no alerts, then remove the 'on' class and add the 'off' class
     if (b_alerts.length === 0)
     {$(b_notify).removeClass('on'); $(b_notify).addClass('off'); }
     else {$(b_notify).removeClass('off'); $(b_notify).addClass('on'); }
       // update the text on the page using the prompt data for the selected language
-    updatePage('buyer');
+    updatePage('student');
     // enable the buttons to process an onClick event
     let _create = $('#newOrder');
     let _list = $('#orderStatus');
     let _orderDiv = $('#'+orderDiv);
     _create.on('click', function(){displayOrderForm();});
     _list.on('click', function(){listOrders();});
-    $('#buyer').empty();
+    $('#student').empty();
     // build the buer select HTML element
-    for (let each in buyers)
+    for (let each in students)
     {(function(_idx, _arr)
-        {$('#buyer').append('<option value="'+_arr[_idx].id+'">' +_arr[_idx].id+'</option>');})(each, buyers);
+        {$('#student').append('<option value="'+_arr[_idx].id+'">' +_arr[_idx].id+'</option>');})(each, students);
     }
-    // display the name of the current buyer
-    $('#company')[0].innerText = buyers[0].companyName;
-    // save the current buyer id as b_id
-    b_id = buyers[0].id;
+    // display the name of the current student
+    $('#company')[0].innerText = students[0].companyName;
+    // save the current student id as b_id
+    b_id = students[0].id;
     // subscribe to events
-    z2bSubscribe('Buyer', b_id);
-      // create a function to execute when the user selects a different buyer
-    $('#buyer').on('change', function() 
-    { _orderDiv.empty(); $('#buyer_messages').empty(); 
-        $('#company')[0].innerText = findMember($('#buyer').find(':selected').text(),buyers).companyName; 
-        // unsubscribe the current buyer
+    z2bSubscribe('Student', b_id);
+      // create a function to execute when the user selects a different student
+    $('#student').on('change', function() 
+    { _orderDiv.empty(); $('#student_messages').empty(); 
+        $('#company')[0].innerText = findMember($('#student').find(':selected').text(),students).companyName; 
+        // unsubscribe the current student
         z2bUnSubscribe(b_id);
-        // get the new buyer id
-        b_id = findMember($('#buyer').find(':selected').text(),buyers).id;
-        // subscribe the new buyer
-        z2bSubscribe('Buyer', b_id);
+        // get the new student id
+        b_id = findMember($('#student').find(':selected').text(),students).id;
+        // subscribe the new student
+        z2bSubscribe('Student', b_id);
     });
 
 }
 /**
- * Displays the create order form for the selected buyer
+ * Displays the create order form for the selected student
  */
 function displayOrderForm()
 {  let toLoad = 'createOrder.html';
@@ -123,7 +123,7 @@ function displayOrderForm()
         $('#submitNewOrder').hide();
         $('#submitNewOrder').on('click', function ()
             { let options = {};
-            options.buyer = $('#buyer').find(':selected').val();
+            options.student = $('#student').find(':selected').val();
             options.seller = $('#seller').find(':selected').val();
             options.items = newItems;
             console.log(options);
@@ -172,13 +172,13 @@ function displayOrderForm()
     });
 }
 /**
- * lists all orders for the selected buyer
+ * lists all orders for the selected student
  */
 function listOrders()
 {
     let options = {};
     // get the users email address
-    options.id = $('#buyer').find(':selected').text();
+    options.id = $('#student').find(':selected').text();
     // get their password from the server. This is clearly not something we would do in production, but enables us to demo more easily
     // $.when($.post('/composer/admin/getSecret', options)).done(function(_mem)
     // {
@@ -201,7 +201,7 @@ function listOrders()
 
 /**
  * used by the listOrders() function
- * formats the orders for a buyer. Orders to be formatted are provided in the _orders array
+ * formats the orders for a student. Orders to be formatted are provided in the _orders array
  * output replaces the current contents of the html element identified by _target
  * @param {String} _target - string with div id prefaced by #
  * @param {Array} _orders - array with order objects
@@ -216,7 +216,7 @@ function formatOrders(_target, _orders)
         let r_string;
         r_string = '</th>';
         //
-        // each order can have different states and the action that a buyer can take is directly dependent on the state of the order.
+        // each order can have different states and the action that a student can take is directly dependent on the state of the order.
         // this switch/case table displays selected order information based on its current status and displays selected actions, which
         // are limited by the sate of the order.
         //
@@ -310,12 +310,12 @@ function formatOrders(_target, _orders)
                 let options = {};
                 options.action = $('#b_action'+_idx).find(':selected').text();
                 options.orderNo = $('#b_order'+_idx).text();
-                options.participant = $('#buyer').val();
+                options.participant = $('#student').val();
                 if ((options.action === 'Dispute') || (options.action === 'Resolve'))
                 {options.reason = $('#b_reason'+_idx).val();}
-                $('#buyer_messages').prepend(formatMessage(options.action+textPrompts.orderProcess.processing_msg.format(options.action, options.orderNo)+options.orderNo));
+                $('#student_messages').prepend(formatMessage(options.action+textPrompts.orderProcess.processing_msg.format(options.action, options.orderNo)+options.orderNo));
                 $.when($.post('/composer/client/orderAction', options)).done(function (_results)
-                { $('#buyer_messages').prepend(formatMessage(_results.result)); });
+                { $('#student_messages').prepend(formatMessage(_results.result)); });
             });
             // use the notifyMe function to determine if this order is in the alert array. 
             // if it is, the highlight the $('#b_status'+_idx) html element by adding the 'highlight' class
@@ -325,5 +325,5 @@ function formatOrders(_target, _orders)
     // reset the b_alerts array to a new array
     b_alerts = new Array();
     // call the toggleAlerts function to reset the alert icon
-    toggleAlert($('#buyer_notify'), b_alerts, b_alerts.length);
+    toggleAlert($('#student_notify'), b_alerts, b_alerts.length);
 }

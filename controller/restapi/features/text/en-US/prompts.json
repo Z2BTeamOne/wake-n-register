@@ -4,7 +4,7 @@
     "header": "Chapter 12: Integrating the User Experiences",
     "titleBar": "Zero to Blockchain Tutorial",
     "idx_unified": "load Unified User Experience",
-    "idx_buyer": "load Buyer User Experience",
+    "idx_student": "load Student User Experience",
     "idx_seller": "load Seller User Experience",
     "idx_provider": "load Provider User Experience",
     "idx_shipper": "load Shipper User Experience",
@@ -67,8 +67,8 @@
     "bc_gh_api": "get Historian",
     "bc_gh_param": "(none)"
   },
-  "buyer": {
-    "title": "Buyer Chapter 12. Select Buyer to see their view: ",
+  "student": {
+    "title": "Student Chapter 12. Select Student to see their view: ",
     "newOrder": "Create New Order",
     "orderStatus": "Display Order Status"
   },
@@ -92,7 +92,7 @@
   },
   "createMember": {
     "cd_type": "Type",
-    "cd_buyer": "Buyer",
+    "cd_student": "Student",
     "cd_seller": "Seller",
     "cd_shipper": "Shipper",
     "cd_provider": "Provider",
@@ -186,12 +186,12 @@
     "qty": "Quantity",
     "price": "Price",
     "processing_msg": "Processing {0} request for order number: {1}",
-    "b_no_order_msg": "No orders for this buyer: ",
+    "b_no_order_msg": "No orders for this student: ",
     "s_no_order_msg": "No orders for this seller: ",
     "p_no_order_msg": "No orders for this provider: ",
     "sh_no_order_msg": "No orders for this shipper: ",
     "create_msg": "Processing Create Order request",
-    "buyer": "Buyer: "
+    "student": "Student: "
   },
   "financeCoOrder": {
     "status": "Current Status: ",

@@ -85,7 +85,7 @@ let adminConnection = new AdminConnection();
                     {
                     // the participant registry is where member information is first stored
                     // there are individual registries for each type of participant, or member.
-                    // In our case, that is Buyer, Seller, Provider, Shipper, FinanceCo
+                    // In our case, that is Student, Seller, Provider, Shipper, FinanceCo
                     return businessNetworkConnection.getParticipantRegistry(config.composer.NS+'.'+_arr[_idx].type)
                     .then(function(participantRegistry){
                         return participantRegistry.get(_arr[_idx].id)
@@ -167,14 +167,14 @@ let adminConnection = new AdminConnection();
                             order.orderNumber = _arr[_idx].id;
                             // then the buy transaction is created
                             const createNew = factory.newTransaction(config.composer.NS, 'CreateOrder');
-                            order.buyer = factory.newRelationship(config.composer.NS, 'Buyer', _arr[_idx].buyer);
+                            order.student = factory.newRelationship(config.composer.NS, 'Student', _arr[_idx].student);
                             order.seller = factory.newRelationship(config.composer.NS, 'Seller', _arr[_idx].seller);
                             order.provider = factory.newRelationship(config.composer.NS, 'Provider', 'noop@dummyProvider');
                             order.shipper = factory.newRelationship(config.composer.NS, 'Shipper', 'noop@dummyShipper');
                             order.financeCo = factory.newRelationship(config.composer.NS, 'FinanceCo', financeCoID);
                             createNew.financeCo = factory.newRelationship(config.composer.NS, 'FinanceCo', financeCoID);
                             createNew.order = factory.newRelationship(config.composer.NS, 'Order', order.$identifier);
-                            createNew.buyer = factory.newRelationship(config.composer.NS, 'Buyer', _arr[_idx].buyer);
+                            createNew.student = factory.newRelationship(config.composer.NS, 'Student', _arr[_idx].student);
                             createNew.seller = factory.newRelationship(config.composer.NS, 'Seller', _arr[_idx].seller);
                             createNew.amount = order.amount;
                             // then the order is added to the asset registry.

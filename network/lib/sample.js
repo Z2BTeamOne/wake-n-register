@@ -37,7 +37,7 @@ var ns = 'org.acme.Z2BTestNetwork';
  * @transaction
  */
 function CreateOrder(purchase) {
-    purchase.order.buyer = purchase.buyer;
+    purchase.order.student = purchase.student;
     purchase.order.amount = purchase.amount;
     purchase.order.financeCo = purchase.financeCo;
     purchase.order.created = new Date().toISOString();
@@ -60,7 +60,7 @@ function CreateOrder(purchase) {
 function Buy(purchase) {
     if (purchase.order.status == JSON.stringify(orderStatus.Created))
     {
-        purchase.order.buyer = purchase.buyer;
+        purchase.order.student = purchase.student;
         purchase.order.seller = purchase.seller;
         purchase.order.bought = new Date().toISOString();
         purchase.order.status = JSON.stringify(orderStatus.Bought);
@@ -83,7 +83,7 @@ function Buy(purchase) {
 function OrderCancel(purchase) {
     if ((purchase.order.status == JSON.stringify(orderStatus.Created)) || (purchase.order.status == JSON.stringify(orderStatus.Bought)) || (purchase.order.status == JSON.stringify(orderStatus.Backordered)))
     {
-        purchase.order.buyer = purchase.buyer;
+        purchase.order.student = purchase.student;
         purchase.order.seller = purchase.seller;
         purchase.order.cancelled = new Date().toISOString();
         purchase.order.status = JSON.stringify(orderStatus.Cancelled);
@@ -248,7 +248,7 @@ function Pay(purchase) {
         });
 }
  /**
- * Record a dispute by the buyer
+ * Record a dispute by the student
  * @param {org.acme.Z2BTestNetwork.Dispute} purchase - the order to be processed
  * @transaction
  */
@@ -286,7 +286,7 @@ function Resolve(purchase) {
         });
 }
  /**
- * Record a refund to the buyer
+ * Record a refund to the student
  * @param {org.acme.Z2BTestNetwork.Refund} purchase - the order to be processed
  * @transaction
  */
@@ -350,7 +350,7 @@ function z2bEmit(_event, _order)
     var factory = getFactory();
     var z2bEvent = factory.newEvent(ns, _event);
     z2bEvent.orderID = _order.$identifier;
-    z2bEvent.buyerID = _order.buyer.$identifier;
+    z2bEvent.studentID = _order.student.$identifier;
     switch (_event)
     {
         case 'Created':

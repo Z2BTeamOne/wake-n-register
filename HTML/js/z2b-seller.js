@@ -26,7 +26,7 @@ let s_id;
 function loadSellerUX ()
 {
     let toLoad = 'seller.html';
-    if (buyers.length === 0) 
+    if (students.length === 0) 
     { $.when($.get(toLoad), deferredMemberLoad()).done(function (page, res)
     {setupSeller(page[0]);});
     }
@@ -53,7 +53,7 @@ function setupSeller(page)
     let _orderDiv = $('#'+sellerOrderDiv);
     _clear.on('click', function(){_orderDiv.empty();});
     //
-    // this section changes from the previous chapter, buyer changing to seller
+    // this section changes from the previous chapter, student changing to seller
     //
     _list.on('click', function(){listSellerOrders();});
     $('#seller').empty();
@@ -78,7 +78,7 @@ function listSellerOrders()
 {
     let options = {};
     //
-    // seller instead of buyer
+    // seller instead of student
     //
     options.id= $('#seller').find(':selected').val();
     options.userID = options.id;
@@ -90,7 +90,7 @@ function listSellerOrders()
 }
 /**
  * used by the listOrders() function
- * formats the orders for a buyer. Orders to be formatted are provided in the _orders array
+ * formats the orders for a student. Orders to be formatted are provided in the _orders array
  * output replaces the current contents of the html element identified by _target
  * @param {String} _target - string with div id prefaced by #
  * @param {Array} _orders - array with order objects
@@ -103,7 +103,7 @@ function formatSellerOrders(_target, _orders)
     {(function(_idx, _arr)
         { let _action = '<th><select id=s_action'+_idx+'><option value="'+textPrompts.orderProcess.NoAction.select+'">'+textPrompts.orderProcess.NoAction.message+'</option>';
         //
-        // each order can have different states and the action that a buyer can take is directly dependent on the state of the order. 
+        // each order can have different states and the action that a student can take is directly dependent on the state of the order. 
         // this switch/case table displays selected order information based on its current status and displays selected actions, which
         // are limited by the sate of the order.
         //
@@ -158,7 +158,7 @@ function formatSellerOrders(_target, _orders)
         let _button = '<th><button id="s_btn_'+_idx+'">'+textPrompts.orderProcess.ex_button+'</button></th>'
         _action += '</select>';
         if (_idx > 0) {_str += '<div class="spacer"></div>';}
-        _str += '<table class="wide"><tr><th>'+textPrompts.orderProcess.orderno+'</th><th>'+textPrompts.orderProcess.status+'</th><th class="right">'+textPrompts.orderProcess.total+'</th><th colspan="3" class="right message">'+textPrompts.orderProcess.buyer+findMember(_arr[_idx].buyer.split('#')[1],buyers).companyName+'</th></tr>';
+        _str += '<table class="wide"><tr><th>'+textPrompts.orderProcess.orderno+'</th><th>'+textPrompts.orderProcess.status+'</th><th class="right">'+textPrompts.orderProcess.total+'</th><th colspan="3" class="right message">'+textPrompts.orderProcess.student+findMember(_arr[_idx].student.split('#')[1],students).companyName+'</th></tr>';
         _str += '<tr><th id ="s_order'+_idx+'" width="20%">'+_arr[_idx].id+'</th><th width="50%" id="s_status'+_idx+'">'+JSON.parse(_arr[_idx].status).text+': '+_date+'</th><th class="right">$'+_arr[_idx].amount+'.00</th>'+_action+'<br/><select id="providers'+_idx+'">'+p_string+'</th>'+_button+'</tr></table>';
         _str+= '<table class="wide"><tr align="center"><th>'+textPrompts.orderProcess.itemno+'</th><th>'+textPrompts.orderProcess.description+'</th><th>'+textPrompts.orderProcess.qty+'</th><th>'+textPrompts.orderProcess.price+'</th></tr>'
         for (let every in _arr[_idx].items)

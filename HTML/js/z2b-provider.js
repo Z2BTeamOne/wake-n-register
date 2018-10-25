@@ -28,7 +28,7 @@ let p_id;
 function loadProviderUX ()
 {
     let toLoad = 'provider.html';
-    if (buyers.length === 0)
+    if (students.length === 0)
     { $.when($.get(toLoad), deferredMemberLoad()).done(function (page, res)
       {setupProvider(page[0]);});
     }
@@ -154,7 +154,7 @@ function formatProviderOrders(_target, _orders)
         let _button = '<th><button id="p_btn_'+_idx+'">'+textPrompts.orderProcess.ex_button+'</button></th>'
         _action += '</select>';
         if (_idx > 0) {_str += '<div class="spacer"></div>';}
-        _str += '<table class="wide"><tr><th>'+textPrompts.orderProcess.orderno+'</th><th>'+textPrompts.orderProcess.status+'</th><th class="right">'+textPrompts.orderProcess.total+'</th><th colspan="3" class="right message">'+textPrompts.orderProcess.buyer+findMember(_arr[_idx].buyer.split('#')[1],buyers).companyName+'</th></tr>';
+        _str += '<table class="wide"><tr><th>'+textPrompts.orderProcess.orderno+'</th><th>'+textPrompts.orderProcess.status+'</th><th class="right">'+textPrompts.orderProcess.total+'</th><th colspan="3" class="right message">'+textPrompts.orderProcess.student+findMember(_arr[_idx].student.split('#')[1],students).companyName+'</th></tr>';
         _str += '<tr><th id ="p_order'+_idx+'" width="20%">'+_arr[_idx].id+'</th><th width="50%" id="p_status'+_idx+'">'+JSON.parse(_arr[_idx].status).text+': '+_date+'</th><th class="right">$'+_arr[_idx].amount+'.00</th>'+_action+'<br/><select id="shippers'+_idx+'">'+sh_string+b_string+'</th>'+_button+'</tr></table>';
         _str+= '<table class="wide"><tr align="center"><th>'+textPrompts.orderProcess.itemno+'</th><th>'+textPrompts.orderProcess.description+'</th><th>'+textPrompts.orderProcess.qty+'</th><th>'+textPrompts.orderProcess.price+'</th></tr>';
         for (let every in _arr[_idx].items)

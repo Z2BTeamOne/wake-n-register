@@ -4,8 +4,8 @@
 namespace org.acme.Z2BTestNetwork
 import composer.base.*
 
-participant Buyer identified by buyerID extends Member{
-    o String buyerID
+participant Student identified by studentID extends Member{
+    o String studentID
 }
 participant Seller identified by sellerID extends Member{
     o String sellerID
@@ -45,7 +45,7 @@ asset Order identified by orderNumber {
     o String paid
     --> Provider provider
     --> Shipper shipper
-    --> Buyer buyer
+    --> Student student
     --> Seller seller 
     --> FinanceCo financeCo 
 
@@ -53,18 +53,18 @@ asset Order identified by orderNumber {
   transaction CreateOrder {
     o Integer amount
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction OrderCancel {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction Buy {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
 }
   transaction OrderFromSupplier {
@@ -94,14 +94,14 @@ asset Order identified by orderNumber {
   transaction Dispute {
     o String dispute
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> FinanceCo financeCo
 }
   transaction Resolve {
     o String resolve
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> Seller seller
     --> Shipper shipper
     --> Provider provider
@@ -114,7 +114,7 @@ asset Order identified by orderNumber {
 }
   transaction AuthorizePayment {
     --> Order order
-    --> Buyer buyer
+    --> Student student
     --> FinanceCo financeCo
 }
   transaction Pay {
@@ -138,40 +138,40 @@ abstract event Z2BEvent extends BasicEvent {
 
 // notification that an order has been created
 event Created extends Z2BEvent {
-  o String buyerID
+  o String studentID
 }
 // notification that an order has been placed
 event Bought extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String financeCoID
 }
 
 // notification that a fulfillment request has been placed
 event Ordered extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
 }
 
 // notification that an order has been cancelled
 event Cancelled extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
 }
 
 // notification that items are on backorder 
 event Backordered extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
 }
 
 // notification that shipper has been contacted 
 event ShipRequest extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
 }
@@ -179,7 +179,7 @@ event ShipRequest extends Z2BEvent {
 // notification that order in being delivered
 event DeliveryStarted extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
 }
@@ -187,7 +187,7 @@ event DeliveryStarted extends Z2BEvent {
 // notification that order has been delivered
 event DeliveryCompleted extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
 }
@@ -195,7 +195,7 @@ event DeliveryCompleted extends Z2BEvent {
 // notification that order is in dispute 
 event DisputeOpened extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
   o String financeCoID
@@ -204,7 +204,7 @@ event DisputeOpened extends Z2BEvent {
 // notification that dispute has been resolved 
 event Resolved extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
   o String financeCoID
@@ -213,7 +213,7 @@ event Resolved extends Z2BEvent {
 // notification that an order has been refunded 
 event Refunded extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
   o String financeCoID
@@ -222,21 +222,21 @@ event Refunded extends Z2BEvent {
 // notification that a request for payment has been issued 
 event PaymentRequested extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String financeCoID
 }
 
-// notification that a request for payment has been approved by the buyer 
+// notification that a request for payment has been approved by the student 
 event PaymentAuthorized extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String financeCoID
 }
 
 // notification that order has been paid /
 event Paid extends Z2BEvent {
   o String sellerID
-  o String buyerID
+  o String studentID
   o String providerID
   o String shipperID
   o String financeCoID

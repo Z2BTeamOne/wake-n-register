@@ -22,7 +22,7 @@ let businessNetwork = 'zerotoblockchain-network';
 
 let host_address = window.location.host;
 
-let buyers = new Array();
+let students = new Array();
 let sellers= new Array();
 let providers= new Array();
 let shippers= new Array();
